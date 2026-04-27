@@ -1,0 +1,72 @@
+# Builds the scan-and-gate image from Dockerfile and runs the same entrypoint
+# customers use with docker run. Configure repository Variables and Secrets
+# (see README.md or docs/ci-integration-flow.md).
+name: APIsec scan and gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "apisec-scan-and-gate.sh"
+      - "Dockerfile"
+      - ".dockerignore"
+      - ".github/workflows/apisec-scan-and-gate.yml"
+  pull_request:
+    paths:
+      - "apisec-scan-and-gate.sh"
+      - "Dockerfile"
+      - ".dockerignore"
+      - ".github/workflows/apisec-scan-and-gate.yml"
+
+concurrency:
+  group: apisec-scan-and-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  scan-and-gate:
+    runs-on: ubuntu-latest
+    # Fork PRs do not receive repository secrets; skip to avoid failing runs.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t apisec-scan-and-gate:local .
+
+      - name: Run scan and gate
+        env:
+          APISEC_TOKEN: ${{ secrets.APISEC_TOKEN }}
+          APISEC_HOST: ${{ vars.APISEC_HOST }}
+          APISEC_APP_ID: ${{ vars.APISEC_APP_ID }}
+          APISEC_INSTANCE_ID: ${{ vars.APISEC_INSTANCE_ID }}
+          APISEC_AUTH_ID: ${{ vars.APISEC_AUTH_ID }}
+          APISEC_MAX_CRITICAL: ${{ vars.APISEC_MAX_CRITICAL }}
+          APISEC_MAX_HIGH: ${{ vars.APISEC_MAX_HIGH }}
+          APISEC_POLL_INTERVAL: ${{ vars.APISEC_POLL_INTERVAL }}
+          APISEC_TIMEOUT: ${{ vars.APISEC_TIMEOUT }}
+        run: |
+          set -euo pipefail
+          if [ -z "${APISEC_TOKEN:-}" ]; then
+            echo "Missing secret APISEC_TOKEN. Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          export APISEC_HOST="${APISEC_HOST:-https://cloud.apisecapps.com}"
+          export APISEC_MAX_CRITICAL="${APISEC_MAX_CRITICAL:-0}"
+          export APISEC_MAX_HIGH="${APISEC_MAX_HIGH:-5}"
+          docker run --rm \
+            -e APISEC_TOKEN \
+            -e APISEC_HOST \
+            -e APISEC_APP_ID \
+            -e APISEC_INSTANCE_ID \
+            -e APISEC_AUTH_ID \
+            -e APISEC_MAX_CRITICAL \
+            -e APISEC_MAX_HIGH \
+            -e APISEC_POLL_INTERVAL \
+            -e APISEC_TIMEOUT \
+            apisec-scan-and-gate:local
