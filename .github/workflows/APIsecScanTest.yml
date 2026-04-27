@@ -56,7 +56,6 @@ jobs:
             echo "Missing secret APISEC_TOKEN. Add it under Settings → Secrets and variables → Actions."
             exit 1
           fi
-          export APISEC_HOST="${APISEC_HOST:-https://api.dev.apisecapps.com}"
           export APISEC_MAX_CRITICAL="${APISEC_MAX_CRITICAL:-0}"
           export APISEC_MAX_HIGH="${APISEC_MAX_HIGH:-5}"
           docker run --rm \
