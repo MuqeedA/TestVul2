@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build image
-        run: docker build -t apisec-scan-and-gate:local .
+        run: docker pull muqeedapisec/apisec-scan-and-gate:latest
 
       - name: Run scan and gate
         env:
@@ -69,4 +69,4 @@ jobs:
             -e APISEC_MAX_HIGH \
             -e APISEC_POLL_INTERVAL \
             -e APISEC_TIMEOUT \
-            apisec-scan-and-gate:local
+            muqeedapisec/apisec-scan-and-gate:latest
