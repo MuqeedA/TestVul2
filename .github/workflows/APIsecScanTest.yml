@@ -8,18 +8,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "apisec-scan-and-gate.sh"
-      - "Dockerfile"
-      - ".dockerignore"
-      - ".github/workflows/apisec-scan-and-gate.yml"
   pull_request:
-    paths:
-      - "apisec-scan-and-gate.sh"
-      - "Dockerfile"
-      - ".dockerignore"
-      - ".github/workflows/apisec-scan-and-gate.yml"
-
+    branches:
+      - main
 concurrency:
   group: apisec-scan-and-gate-${{ github.ref }}
   cancel-in-progress: true
