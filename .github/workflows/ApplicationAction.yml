@@ -1,0 +1,86 @@
+# Builds the scan-and-gate image from Dockerfile and runs the same entrypoint
+# customers use with docker run. Configure repository Variables and Secrets
+# (see README.md or docs/ci-integration-flow.md).
+name: APIsec scan and gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+concurrency:
+  group: apisec-scan-and-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  apisec-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run APIsec scan and enforce thresholds (Docker)
+        env:
+          APISEC_TOKEN: ${{ secrets.APISEC_TOKEN }}
+          APISEC_HOST: https://api.dev.apisecapps.com
+          APISEC_APP_ID: 019bff5b-65e2-72e7-840e-31fe245c2aff
+          APISEC_INSTANCE_ID: 019bff5b-6f5a-7f14-8017-406d36572017
+          APISEC_AUTH_ID: ${{ vars.APISEC_AUTH_ID }}
+          APISEC_MAX_CRITICAL: "0"
+          APISEC_MAX_HIGH: "5"
+          IMAGE: docker.io/apisec/apisec-scan-and-gate:latest
+        run: |
+          docker run --rm \
+            -e APISEC_TOKEN \
+            -e APISEC_HOST \
+            -e APISEC_APP_ID \
+            -e APISEC_INSTANCE_ID \
+            -e APISEC_AUTH_ID \
+            -e APISEC_MAX_CRITICAL \
+            -e APISEC_MAX_HIGH \
+            "$IMAGE"
+# jobs:
+#   scan-and-gate:
+#     runs-on: ubuntu-latest
+#     # Fork PRs do not receive repository secrets; skip to avoid failing runs.
+#     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+
+#       - name: Build image
+#         run: docker pull muqeedapisec/apisec-scan-and-gate:latest
+
+#       - name: Run scan and gate
+#         env:
+#           APISEC_TOKEN: ${{ secrets.APISEC_TOKEN }}
+#           APISEC_HOST: ${{ vars.APISEC_HOST }}
+#           APISEC_APP_ID: ${{ vars.APISEC_APP_ID }}
+#           APISEC_INSTANCE_ID: ${{ vars.APISEC_INSTANCE_ID }}
+#           APISEC_AUTH_ID: ${{ vars.APISEC_AUTH_ID }}
+#           APISEC_MAX_CRITICAL: ${{ vars.APISEC_MAX_CRITICAL }}
+#           APISEC_MAX_HIGH: ${{ vars.APISEC_MAX_HIGH }}
+#           APISEC_POLL_INTERVAL: ${{ vars.APISEC_POLL_INTERVAL }}
+#           APISEC_TIMEOUT: ${{ vars.APISEC_TIMEOUT }}
+#         run: |
+#           set -euo pipefail
+#           if [ -z "${APISEC_TOKEN:-}" ]; then
+#             echo "Missing secret APISEC_TOKEN. Add it under Settings → Secrets and variables → Actions."
+#             exit 1
+#           fi
+#           export APISEC_MAX_CRITICAL="${APISEC_MAX_CRITICAL:-0}"
+#           export APISEC_MAX_HIGH="${APISEC_MAX_HIGH:-5}"
+#           docker run --rm \
+#             -e APISEC_TOKEN \
+#             -e APISEC_HOST \
+#             -e APISEC_APP_ID \
+#             -e APISEC_INSTANCE_ID \
+#             -e APISEC_AUTH_ID \
+#             -e APISEC_MAX_CRITICAL \
+#             -e APISEC_MAX_HIGH \
+#             -e APISEC_POLL_INTERVAL \
+#             -e APISEC_TIMEOUT \
+#             muqeedapisec/apisec-scan-and-gate:latest
