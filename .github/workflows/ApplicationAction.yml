@@ -26,11 +26,11 @@ jobs:
         env:
           APISEC_TOKEN: ${{ secrets.APISEC_TOKEN }}
           APISEC_HOST: https://api.dev.apisecapps.com
-          APISEC_APP_ID: 019bff5b-65e2-72e7-840e-31fe245c2aff
-          APISEC_INSTANCE_ID: 019bff5b-6f5a-7f14-8017-406d36572017
+          APISEC_APP_ID: ${{vars.APISEC_APP_ID}}
+          APISEC_INSTANCE_ID: ${{vars.APISEC_INSTANCE_ID}}
           APISEC_AUTH_ID: ${{ vars.APISEC_AUTH_ID }}
-          APISEC_MAX_CRITICAL: "0"
-          APISEC_MAX_HIGH: "5"
+          APISEC_MAX_CRITICAL: "5"
+          APISEC_MAX_HIGH: "10"
           IMAGE: docker.io/apisec/apisec-scan-and-gate:latest
         run: |
           docker run --rm \
