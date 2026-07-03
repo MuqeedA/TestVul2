@@ -25,14 +25,14 @@ jobs:
       - name: Run APIsec scan and enforce thresholds (Docker)
         env:
           APISEC_TOKEN: ${{ secrets.APISEC_TOKEN }}
-          APISEC_HOST: https://api.dev.apisecapps.com
-          INPUT_APISEC_UI_URL: https://demo.dev.apisecapps.com
-          APISEC_MODE: detections
+          APISEC_HOST: ${{vars.APISEC_HOST}}
+          INPUT_APISEC_UI_URL: ${{vars.INPUT_APISEC_UI_URL}}
+          APISEC_MODE: ${{vars.APISEC_MODE}}
           APISEC_APP_ID: ${{vars.APISEC_APP_ID}}
           APISEC_INSTANCE_ID: ${{vars.APISEC_INSTANCE_ID}}
           APISEC_AUTH_ID: ${{ vars.APISEC_AUTH_ID }}
-          APISEC_MAX_CRITICAL: "5"
-          APISEC_MAX_HIGH: "10"
+          APISEC_MAX_CRITICAL: ${{ vars.APISEC_MAX_CRITICAL }}
+          APISEC_MAX_HIGH: ${{ vars.APISEC_MAX_HIGH }}
           IMAGE: docker.io/apisec/apisec-scan-and-gate:latest
         run: |
           docker run --rm \
