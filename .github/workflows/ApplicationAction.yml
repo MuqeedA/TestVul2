@@ -40,6 +40,8 @@ jobs:
             -e APISEC_HOST \
             -e APISEC_APP_ID \
             -e APISEC_INSTANCE_ID \
+            -e INPUT_APISEC_UI_URL \
+            -e APISEC_MODE \
             -e APISEC_AUTH_ID \
             -e APISEC_MAX_CRITICAL \
             -e APISEC_MAX_HIGH \
