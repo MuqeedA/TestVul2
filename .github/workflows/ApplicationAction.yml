@@ -26,6 +26,8 @@ jobs:
         env:
           APISEC_TOKEN: ${{ secrets.APISEC_TOKEN }}
           APISEC_HOST: https://api.dev.apisecapps.com
+          INPUT_APISEC_UI_URL: https://demo.dev.apisecapps.com
+          APISEC_MODE: detections
           APISEC_APP_ID: ${{vars.APISEC_APP_ID}}
           APISEC_INSTANCE_ID: ${{vars.APISEC_INSTANCE_ID}}
           APISEC_AUTH_ID: ${{ vars.APISEC_AUTH_ID }}
