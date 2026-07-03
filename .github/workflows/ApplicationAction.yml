@@ -1,7 +1,7 @@
 # Builds the scan-and-gate image from Dockerfile and runs the same entrypoint
 # customers use with docker run. Configure repository Variables and Secrets
 # (see README.md or docs/ci-integration-flow.md).
-name: APIsec scan and gate
+name: APIsec scan and gate apisec
 
 on:
   workflow_dispatch:
