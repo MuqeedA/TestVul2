@@ -26,7 +26,7 @@ jobs:
         env:
           APISEC_TOKEN: ${{ secrets.APISEC_TOKEN }}
           APISEC_HOST: ${{vars.APISEC_HOST}}
-          APISEC_UI_URL: ${{vars.INPUT_APISEC_UI_URL}}
+          APISEC_UI_URL: ${{vars.APISEC_UI_URL}}
           APISEC_MODE: ${{vars.APISEC_MODE}}
           APISEC_APP_ID: ${{vars.APISEC_APP_ID}}
           APISEC_INSTANCE_ID: ${{vars.APISEC_INSTANCE_ID}}
