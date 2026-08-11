@@ -13,3 +13,4 @@ test new yml file
 test
 trigger
 removed api host
+after script update test
