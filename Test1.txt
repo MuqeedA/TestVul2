@@ -1,17 +1,1 @@
-Test - Initial commit
-Test - Another commit
-another commit
-another commit 2
-new changes 3
-docker new test
-test new yml file
-2nd july edit
-2222
-3333
-4444
-6666
-test
-trigger
-removed api host
-after script update test2
-after docker image created
+test1
