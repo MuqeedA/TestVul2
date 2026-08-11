@@ -14,3 +14,4 @@ test
 trigger
 removed api host
 after script update test2
+after docker image created
