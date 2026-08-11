@@ -1,2 +1,2 @@
 test1
-prod test
+prod test2
