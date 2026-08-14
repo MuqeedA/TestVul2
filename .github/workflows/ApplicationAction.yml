@@ -35,7 +35,6 @@ jobs:
           APISEC_MAX_HIGH: ${{ vars.APISEC_MAX_HIGH }}
           IMAGE: docker.io/apisec/apisec-scan-and-gate:latest
         run: |
-          docker run --rm \
             -e APISEC_TOKEN \
             -e APISEC_HOST \
             -e APISEC_APP_ID \
